@@ -2,12 +2,12 @@ version: '3'
 services:
     ngrok:
         container_name: ngrok
-        image: ngrok/ngrok:debian
-        command: http laravel:80
+        image: 'ngrok/ngrok:debian'
+        command: 'http laravel:80'
         volumes:
-            - ./ngrok/ngrok.yml:/home/ngrok/.config/ngrok/ngrok.yml
+            - './ngrok/ngrok.yml:/home/ngrok/.config/ngrok/ngrok.yml'
         ports:
-            - 3000:4040
+            - '3000:4040'
         environment:
             - NGROK_AUTHTOKEN=2LQ3hUUOKFP8uH4zHKXcNm7FVLA_3hvNTt6pQEc4WHpbeWtrM
             - DOMAIN=php-apache
