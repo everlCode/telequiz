@@ -72,5 +72,5 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
         //dd($validated_data);
         Quiz::create($validated_data);
         return to_route('admin.quizzez');
-    })->name('quizezz.store');
+    })->name('quizzez.store');
 });

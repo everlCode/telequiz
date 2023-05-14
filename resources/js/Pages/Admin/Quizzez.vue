@@ -5,7 +5,7 @@
         </template>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <table class="min-w-full divide-y divide-gray-200">
+                <table class="min-w-full divide-y divide-gray-200 mb-10">
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col"
@@ -34,45 +34,41 @@
                         </tr>
                     </tbody>
                 </table>
-                <button class="btn">
-                    Create
-                </button>
+                <Button label="Create" icon="pi pi-external-link" @click="visible = true" />
 
-                <div class="popup">
-                    <form @submit.prevent="form.post(route('admin.quizezz.store'))">
-                        <input type="text" name="name" v-model="form.name">
-                        <button type="submit" :disabled="form.processing"
-                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save</button>
-                    </form> 
-                </div>
-
-                <Modal :show=true>
-                    <template #title>
+                <Dialog v-model:visible="visible" modal header="Header" :style="{ width: '50vw' }">
+                    <template #header>
                         Create quiz
                     </template>
-                    <template #content>
-                        <div>w434</div>  
-                    </template>
-                </Modal>    
+                    <form @submit.prevent="form.post(route('admin.quizzez.store'))">
+                            <input type="text" name="name" id="name" v-model="form.name">
+                            <button type="submit" :disabled="form.processing" @click="visible = false"
+                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save</button>
+                        </form> 
+                </Dialog>
+
+                
             </div>
         </div>
     </app-layout>
 </template>
 
-<style>
-
-</style>
+<style></style>
 
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { useForm } from '@inertiajs/vue3';
-import Modal from '@/Components/DialogModal.vue';
+import Button from 'primevue/button';
+import Dialog from 'primevue/dialog';
+
+
 
 export default defineComponent({
     components: {
         AppLayout,
-        Modal,
+        Button,
+        Dialog
     },
     props: {
         quizzez: Array,
@@ -83,6 +79,11 @@ export default defineComponent({
         })
 
         return { form }
+    },
+    data() {
+        return {
+            visible: false
+        }
     }
 });
 </script>

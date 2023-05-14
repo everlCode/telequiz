@@ -1,10 +1,16 @@
 import './bootstrap';
 import '../css/app.css';
+import "primevue/resources/themes/lara-light-indigo/theme.css";     
+    
+//core
+import "primevue/resources/primevue.min.css";
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
+import PrimeVue from 'primevue/config';
+
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -14,6 +20,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
+            .use(PrimeVue)
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },

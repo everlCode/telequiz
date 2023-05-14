@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@vitejs/plugin-vue": "^4.2.2",
+        "primevue": "^3.29.0",
         "vue": "^3.2.36",
         "vue-loader": "^17.0.1"
     }
