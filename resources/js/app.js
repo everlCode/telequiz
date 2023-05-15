@@ -1,6 +1,7 @@
 import './bootstrap';
 import '../css/app.css';
-import "primevue/resources/themes/lara-light-indigo/theme.css";     
+import "primevue/resources/themes/lara-light-indigo/theme.css";   
+import 'primeicons/primeicons.css';  
     
 //core
 import "primevue/resources/primevue.min.css";
