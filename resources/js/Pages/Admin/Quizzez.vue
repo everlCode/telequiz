@@ -5,20 +5,19 @@
         </template>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <DataTable :value="quizzez" tableStyle="min-width: 50rem">
+                <DataTable :value="this.quizzezData" tableStyle="min-width: 50rem; margin-bottom: 10px">
                     <Column field="id" header="Id"></Column>
                     <Column field="name" header="Name"></Column>
                     <Column field="remove" header="Remove" style="width: 5%">
                         <template #body="slotProps">
                             <Button icon="pi pi-times" severity="danger" aria-label="Cancel"
-                                @click="removeQuiz(slotProps.data.id)" />
+                                @click="removeQuiz(slotProps.index, slotProps.data.id)" />
                         </template>
                     </Column>
 
                 </DataTable>
 
-                <Button label="Create" icon="pi pi-external-link" @click="visible = true" />
-
+                <Button label="Create" icon="pi" @click="visible = true" />
                 <Dialog v-model:visible="visible" modal header="Header" :style="{ width: '50vw' }">
                     <template #header>
                         Create quiz
@@ -74,14 +73,19 @@ export default defineComponent({
     },
     data() {
         return {
-            visible: false
+            visible: false,
+            quizzezData: this.quizzez
         }
     },
     methods: {
-        removeQuiz(id) {
-
-            axios.delete('/quizzez/').then((response) => this.data = response.data.response)
+        removeQuiz(i, id) {
+       
+            var url = '/api/quiz/' + id;
+            axios.delete(url).then((response) => console.log(response.data.response))
                 .catch((error) => console.log(error.response.data));
+
+            delete this.quizzezData[i];
+            location.reload();
         }
     },
 });

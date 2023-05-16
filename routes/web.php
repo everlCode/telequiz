@@ -49,7 +49,8 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
     })->name('photos'); // This will respond to requests for admin/photos and have a name of admin.photos
 
     Route::get('/quizzez', function () {
-        
+        //dd(Quiz::all());
+     
         return inertia('Admin/Quizzez', [
         'quizzez' => Quiz::all()
         ]);
@@ -73,4 +74,10 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
         Quiz::create($validated_data);
         return to_route('admin.quizzez');
     })->name('quizzez.store');
+});
+
+Route::middleware(['auth:sanctum', 'verified'])->prefix('api')->name('admin.')->group(function () {
+    Route::delete('/quiz/{id}', function ($id) {
+        return Quiz::destroy($id);
+    })->name('quiz');
 });
