@@ -1,11 +1,11 @@
-<!-- <template>
+<template>
     <app-layout title="Dashboard">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Quizzez</h2>
         </template>
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <DataTable :value="title" tableStyle="min-width: 50rem; margin-bottom: 10px">
+                <DataTable v-model:value="quizzezData" tableStyle="min-width: 50rem; margin-bottom: 10px">
                     <Column field="id" header="Id"></Column>
                     <Column field="name" header="Name"></Column>
                     <Column field="remove" header="Remove" style="width: 5%">
@@ -29,7 +29,7 @@
                             class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save</button>
                     </form>
                 </Dialog>
-
+                <!-- <va-data-table :items="items" /> -->
 
             </div>
         </div>
@@ -69,29 +69,37 @@ export default defineComponent({
         const form = useForm({
             name: null
         })
-    
 
-    // OR, turn a single property on `props` into a ref
-    const title = ref()
 
-    title.value = props.quizzez
+        // OR, turn a single property on `props` into a ref
+        const title = ref()
 
-    return { title, form }
+        title.value = props.quizzez
+
+        return { title, form }
     },
     data() {
         return {
             visible: false,
-            quizzezData: ref(this.quizzez)
+            quizzezData: ref(this.quizzez),
+            items: [{
+                id: 1,
+                name: "Leanne Graham",
+                username: "Bret",
+                email: "Sincere@april.biz",
+                phone: "1-770-736-8031 x56442",
+                website: "hildegard.org",
+            }],
         }
     },
     methods: {
         removeQuiz(i, id) {
-       
+
             var url = '/api/quiz/' + id;
             axios.delete(url).then((response) => console.log(response.data.response))
                 .catch((error) => console.log(error.response.data));
 
-            delete title[i];
+            delete this.quizzezData[i];
             //location.reload();
         }
     },
@@ -99,12 +107,12 @@ export default defineComponent({
 
 
 
-</script> -->
+</script>
 
 
 
 
-<template>
+<!-- <template>
     <div class="card">
         <DataTable :value="quizzez" stripedRows tableStyle="min-width: 50rem">
             <Column field="code" header="Code"></Column>
@@ -143,4 +151,4 @@ quizzez.value = props.quizzez
 
 console.log(props.quizzez)
 
-</script>
+</script> -->

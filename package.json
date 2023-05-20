@@ -23,6 +23,7 @@
         "primeicons": "^6.0.1",
         "primevue": "^3.29.0",
         "vue": "^3.2.36",
-        "vue-loader": "^17.0.1"
+        "vue-loader": "^17.0.1",
+        "vuestic-ui": "^1.6.4"
     }
 }

@@ -1,7 +1,8 @@
 import './bootstrap';
 import '../css/app.css';
 import "primevue/resources/themes/lara-light-indigo/theme.css";   
-import 'primeicons/primeicons.css';  
+import 'primeicons/primeicons.css';
+
     
 //core
 import "primevue/resources/primevue.min.css";
@@ -11,6 +12,10 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import PrimeVue from 'primevue/config';
+
+
+import { createVuestic } from "vuestic-ui";
+import "vuestic-ui/css";
 
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
@@ -23,6 +28,7 @@ createInertiaApp({
             .use(plugin)
             .use(PrimeVue)
             .use(ZiggyVue, Ziggy)
+            .use(createVuestic())
             .mount(el);
     },
     progress: {
