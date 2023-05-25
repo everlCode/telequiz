@@ -77,7 +77,18 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->prefix('api')->name('admin.')->group(function () {
+
     Route::delete('/quiz/{id}', function ($id) {
         return Quiz::destroy($id);
+    })->name('quiz');
+
+    Route::get('/quiz', function (Request $request) {
+
+        return $request->all();;
+        $validated_data = $request->validate([
+            'name' => ['required']
+        ]);
+        return 123;
+        return Quiz::create($validated_data);
     })->name('quiz');
 });

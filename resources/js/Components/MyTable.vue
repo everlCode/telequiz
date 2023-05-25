@@ -16,13 +16,9 @@
     <va-input v-for="key in Object.keys(editedItem)" :key="key" v-model="editedItem[key]" class="my-3" :label="key" />
   </va-modal>
 
-  <va-modal class="modal-crud-example" :model-value="!!editedItem" title="Edit item" size="small" @ok="editItem"
-    @cancel="resetEditedItem">
-    <va-input v-for="key in Object.keys(editedItem)" :key="key" v-model="editedItem[key]" class="my-3" :label="key" />
-  </va-modal>
-
-  <va-modal class="modal-crud-example" :model-value="isCreateModalVisible" title="Create item" size="small" hide-default-actions>
-    <va-form ref="myForm" stateful class="mb-2 flex flex-col gap-2" @submit.prevent="addNewItem">
+  <va-modal class="modal-crud-example" :model-value="isCreateModalVisible" title="Create item" size="small"
+    hide-default-actions @cancel="closeModalToCreateItem">
+    <va-form tag="form" class="mb-2 flex flex-col gap-2" @submit.prevent="addNewItem">
       <va-input v-for="key in Object.keys(editFields)" :key="key" v-model='createItem[key]' class="my-3" :label="key" />
       <va-button type="submit" class="mt-3">
         Create
@@ -32,6 +28,7 @@
 </template>
 <script>
 import { defineComponent } from "vue";
+import axios from 'axios';
 
 export default defineComponent({
   props: {
@@ -73,11 +70,9 @@ export default defineComponent({
 
   methods: {
     resetEditedItem() {
+      console.log(234);
       this.editedItem = null;
       this.editedItemId = null;
-    },
-    resetEditedItem() {
-      this.isCreateModalVisible = null;
     },
     resetCreatedItem() {
       this.createdItem = { ...defaultItem };
@@ -86,8 +81,9 @@ export default defineComponent({
       this.items = [...this.items.slice(0, id), ...this.items.slice(id + 1)];
     },
     addNewItem() {
-      console.log(this.createItem)
-      console.log(2323)
+      axios.get('/api/quiz/').then(response => {
+        console.log(response)
+      })
       // this.items = [...this.items, { ...this.createdItem }];
       // this.resetCreatedItem();
     },
@@ -97,6 +93,10 @@ export default defineComponent({
     },
     openModalToCreateItem() {
       this.isCreateModalVisible = true;
+    },
+    closeModalToCreateItem() {
+      console.log(666)
+      this.isCreateModalVisible = null;
     },
     openModalToEditItemById(id) {
       this.editedItemId = id;
