@@ -70,7 +70,6 @@ export default defineComponent({
 
   methods: {
     resetEditedItem() {
-      console.log(234);
       this.editedItem = null;
       this.editedItemId = null;
     },
@@ -81,25 +80,30 @@ export default defineComponent({
       this.items = [...this.items.slice(0, id), ...this.items.slice(id + 1)];
     },
     addNewItem() {
-      axios.get('/api/quiz/').then(response => {
-        console.log(response)
+      axios.put('/api/quiz/', this.createItem).then(response => {
+        this.items.push(this.createItem);
+      }).finally(() => {
+        this.closeModalToCreateItem();
       })
-      // this.items = [...this.items, { ...this.createdItem }];
-      // this.resetCreatedItem();
     },
     editItem() {
-      this.items[this.editedItemId] = this.editedItem;
-      this.resetEditedItem();
+      let rowId = this.editedItemRowId;
+      let id = this.items[rowId]['id'];
+      axios.post(`/api/quiz/${id}`, this.editedItem).then(response => {
+        console.log(response);
+        this.items[rowId] = this.editedItem;
+      }).finally(() => {
+        this.resetEditedItem();
+      })
     },
     openModalToCreateItem() {
       this.isCreateModalVisible = true;
     },
     closeModalToCreateItem() {
-      console.log(666)
       this.isCreateModalVisible = null;
     },
     openModalToEditItemById(id) {
-      this.editedItemId = id;
+      this.editedItemRowId = id;
       this.editedItem = { ...this.items[id] };
 
       for (const key in this.editedItem) {

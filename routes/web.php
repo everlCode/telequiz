@@ -82,13 +82,16 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('api')->name('admin.')->
         return Quiz::destroy($id);
     })->name('quiz');
 
-    Route::get('/quiz', function (Request $request) {
-
-        return $request->all();;
+    Route::put('/quiz', function (Request $request) {
         $validated_data = $request->validate([
             'name' => ['required']
         ]);
-        return 123;
+      
         return Quiz::create($validated_data);
+    })->name('quiz');
+
+    Route::post('/quiz/{id}', function (Request $request, $id) {
+        $quiz = Quiz::find($id);
+        $quiz->update($request->all());
     })->name('quiz');
 });
