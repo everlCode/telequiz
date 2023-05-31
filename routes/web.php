@@ -76,23 +76,20 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
     })->name('quizzez.store');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->prefix('api')->name('admin.')->group(function () {
+Route::prefix('api')->group(function () {
 
     Route::delete('/quiz/{id}', function ($id) {
         return Quiz::destroy($id);
     })->name('quiz');
 
-    Route::put('/quiz', function (Request $request) {
-        $validated_data = $request->validate([
-            'name' => ['required']
-        ]);
-      
-        return Quiz::create($validated_data);
-    })->name('quiz');
+    Route::put('/quiz', function (Request $request, Quiz $quiz) {
+        return $quiz->createQuiz($request);
+    })->name('quiz')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
     Route::post('/quiz/{id}', function (Request $request, $id) {
+       
         $quiz = Quiz::find($id);
-        $quiz->update($request->all());
+        $quiz->create($request->all());
     })->name('quiz');
 
     Route::delete('/quiz/{id}', function (Request $request, $id) {

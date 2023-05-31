@@ -1,12 +1,13 @@
 <template>
   <form class="form" @submit.prevent="createQuiz">
-    <input type="text" v-model="newQuiz.name" />
+    <input type="text" v-model="newQuiz.name" placeholder="quiz name"/>
     <QuizQestions @addQuestion="addQuestion" @addAnswer="addAnswer" />
     <va-button type="submit" class="my-1 btn mt-4"> Create </va-button>
   </form>
 </template>
 <script>
 import QuizQestions from "@/Components/QuizQestions.vue";
+import { result } from "lodash";
 
 export default {
   components: {
@@ -30,19 +31,24 @@ export default {
         this.newQuiz.questions[key].answers.push(answer)
     },
     createQuiz() {
-        if (!this.validate()) {
-            alert('errror');
-
-            return false;
+        let result = this.validate();
+        if (!result.success) {
+            alert(result.error)
         }
         JSON.stringify(this.newQuiz);
+        axios.put(`/api/quiz/`, JSON.stringify(this.newQuiz)).then((response) => {
+          console.log(response);
+        });
     },
     validate() {
         if ( !this.newQuiz.name) {
-            return false;
+            return {
+                success: false,
+                error: 'Name field is required!'
+            };
         }
 
-        return true;
+        return {success: true};
     }
   },
 };

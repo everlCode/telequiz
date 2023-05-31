@@ -14,7 +14,7 @@
     </div>
 
     <va-modal
-      class="modal-crud"
+      @cancel="addModalVisible = false"
       :model-value="addModalVisible"
       title="Create quizz"
       hide-default-actions

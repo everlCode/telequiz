@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Quiz extends Model
 {
@@ -19,4 +20,10 @@ class Quiz extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function createQuiz(Request $request)
+    {
+        $data = $request->all();
+        return $data['name'];
+    }
 }
