@@ -1,6 +1,6 @@
 <template>
     <div>
-        <va-button @click="$emit('addQuiz')" preset="plain" icon="add"> Add</va-button>
+        <va-button @click="$emit('openAddModal')" preset="plain" icon="add"> Add</va-button>
         <div class="table">
             <div class="header">
                 <div v-for="head in headers" class="head">

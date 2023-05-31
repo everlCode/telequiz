@@ -5,8 +5,22 @@
     </template>
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
       <!-- <MyTable :items="quizzez"/> -->
-      <MyQuizTable :quizzez="quizzez" :headers="headers" @openAddModal="openAddModal" @deleteQuiz="deleteQuiz" @addQuiz="addQuiz"/>
+      <MyQuizTable
+        :quizzez="quizzez"
+        :headers="headers"
+        @openAddModal="openAddModal"
+        @deleteQuiz="deleteQuiz"
+      />
     </div>
+
+    <va-modal
+      class="modal-crud"
+      :model-value="addModalVisible"
+      title="Create quizz"
+      hide-default-actions
+    >
+      <QuizCreateForm />
+    </va-modal>
   </app-layout>
 </template>
 
@@ -21,6 +35,7 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import MyTable from "@/Components/MyTable.vue";
 import MyQuizTable from "../../Components/MyQuizTable.vue";
+import QuizCreateForm from "@/Components/QuizCreateForm.vue"
 import { useForm } from "@inertiajs/vue3";
 import axios from "axios";
 
@@ -29,30 +44,27 @@ export default defineComponent({
     AppLayout,
     MyTable,
     MyQuizTable,
+    QuizCreateForm
   },
   props: {
     quizzez: Array,
   },
-  setup(props) { },
+  setup(props) {},
   data() {
     const headers = { id: "id", name: "name" };
 
     return {
       headers,
+      addModalVisible: false,
     };
   },
   methods: {
-    addQuiz() {
-      this.$router.push('/posts')
-    },
     openAddModal() {
-      alert("modal");
+      this.addModalVisible = true;
     },
     deleteQuiz(id) {
-      axios.delete(`/api/quiz/${id}`).then(response => {
-        
-      })
-    }
+      axios.delete(`/api/quiz/${id}`).then((response) => {});
+    },
   },
 });
 </script>
