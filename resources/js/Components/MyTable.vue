@@ -34,7 +34,8 @@ export default defineComponent({
   props: {
     items: {
       type: Array,
-    }
+      default: true,
+    },
   },
   data() {
     const columns = [
@@ -56,7 +57,7 @@ export default defineComponent({
       editedItem: null,
       editFields,
       isCreateModalVisible: null,
-      createItem
+      createItem,
     };
   },
 
@@ -77,7 +78,10 @@ export default defineComponent({
       this.createdItem = { ...defaultItem };
     },
     deleteItemById(id) {
-      this.items = [...this.items.slice(0, id), ...this.items.slice(id + 1)];
+      let rid = this.items[id]['id'];
+      axios.delete(`/api/quiz/${rid}`).then(response => {
+        location.reload()
+      })
     },
     addNewItem() {
       axios.put('/api/quiz/', this.createItem).then(response => {

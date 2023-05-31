@@ -52,7 +52,7 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
         //dd(Quiz::all());
      
         return inertia('Admin/Quizzez', [
-        'quizzez' => Quiz::all()
+        'quizzez' => Quiz::all(['id', 'name'])
         ]);
     })->name('quizzez'); // This will respond to requests for admin/photos and have a name of admin.photos
 
@@ -93,5 +93,9 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('api')->name('admin.')->
     Route::post('/quiz/{id}', function (Request $request, $id) {
         $quiz = Quiz::find($id);
         $quiz->update($request->all());
+    })->name('quiz');
+
+    Route::delete('/quiz/{id}', function (Request $request, $id) {
+        Quiz::destroy($id);
     })->name('quiz');
 });
