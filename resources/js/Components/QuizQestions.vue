@@ -8,7 +8,7 @@
       <span v-if="q.answers.length > 0" class="variants">Variants:</span>
       <div class="answers ml-10">
         <div v-for="answer in q.answers" class="answer">
-          {{ answer }}
+          {{ answer.name }}
         </div>
         <div v-if="showCreateAnswer === k" class="createAnswer">
           <label for="answer">Answer name:</label>
@@ -29,8 +29,8 @@
     </va-button>
   </div>
 
-  <div class="title mt-10">
-    <va-button class="my-1 btn" icon="add" @click="addNewQuestion">
+  <div v-if="!showCreateQuestion" class="title mt-10">
+    <va-button  class="my-1 btn" icon="add" @click="addNewQuestion">
       add question</va-button
     >
   </div>
@@ -52,7 +52,7 @@ export default {
       this.showCreateQuestion = true;
       this.showCreateAnswer = false;
     },
-    addQuestion() {
+    addQuestion(k) {
       const question = {
         name: this.name,
         answers: [],
@@ -64,8 +64,12 @@ export default {
       this.name = "";
     },
     addAnswer(k) {
-      console.log("addAnswer");
-      this.$emit("addAnswer", k, this.answer);
+      let answer = {
+        name: this.answer,
+        question_id: k
+      }
+      this.$emit("addAnswer", this.answer);
+      this.questions[k].answers?.push(answer);
       this.answer = "";
       this.showCreateAnswer = null;
     },

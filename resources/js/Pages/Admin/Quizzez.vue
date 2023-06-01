@@ -8,19 +8,9 @@
       <MyQuizTable
         :quizzez="quizzez"
         :headers="headers"
-        @openAddModal="openAddModal"
         @deleteQuiz="deleteQuiz"
       />
     </div>
-
-    <va-modal
-      @cancel="addModalVisible = false"
-      :model-value="addModalVisible"
-      title="Create quizz"
-      hide-default-actions
-    >
-      <QuizCreateForm />
-    </va-modal>
   </app-layout>
 </template>
 
@@ -35,7 +25,6 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import MyTable from "@/Components/MyTable.vue";
 import MyQuizTable from "../../Components/MyQuizTable.vue";
-import QuizCreateForm from "@/Components/QuizCreateForm.vue"
 import { useForm } from "@inertiajs/vue3";
 import axios from "axios";
 
@@ -44,7 +33,6 @@ export default defineComponent({
     AppLayout,
     MyTable,
     MyQuizTable,
-    QuizCreateForm
   },
   props: {
     quizzez: Array,
@@ -55,13 +43,10 @@ export default defineComponent({
 
     return {
       headers,
-      addModalVisible: false,
     };
   },
   methods: {
-    openAddModal() {
-      this.addModalVisible = true;
-    },
+    
     deleteQuiz(id) {
       axios.delete(`/api/quiz/${id}`).then((response) => {});
     },

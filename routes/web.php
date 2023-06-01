@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Photo;
+use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -77,17 +78,17 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
 });
 
 Route::prefix('api')->group(function () {
-
+    //QUIZ
     Route::delete('/quiz/{id}', function ($id) {
         return Quiz::destroy($id);
     })->name('quiz');
 
     Route::put('/quiz', function (Request $request, Quiz $quiz) {
-        return $quiz->createQuiz($request);
+        
+        return Quiz::create($request->all());
     })->name('quiz')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
     Route::post('/quiz/{id}', function (Request $request, $id) {
-       
         $quiz = Quiz::find($id);
         $quiz->create($request->all());
     })->name('quiz');
@@ -95,4 +96,9 @@ Route::prefix('api')->group(function () {
     Route::delete('/quiz/{id}', function (Request $request, $id) {
         Quiz::destroy($id);
     })->name('quiz');
+
+    //QUESTION
+    Route::put('/question', function (Request $request, Question $question) {
+        return Question::create($request->all());
+    })->name('quiz')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 });

@@ -1,8 +1,10 @@
 <template>
-  <form class="form" @submit.prevent="createQuiz">
-    <input type="text" v-model="newQuiz.name" placeholder="quiz name"/>
-    <QuizQestions @addQuestion="addQuestion" @addAnswer="addAnswer" />
-    <va-button type="submit" class="my-1 btn mt-4"> Create </va-button>
+  <form class="form" @submit.prevent>
+    <input type="text" v-model="name" placeholder="quiz name" :disabled="showQestions" />
+    <va-button @click="createQuiz" v-if="name && !showQestions" class="my-1 btn mt-4">
+      Create
+    </va-button>
+    <QuizQestions v-if="showQestions" @addQuestion="addQuestion" @addAnswer="addAnswer" />
   </form>
 </template>
 <script>
@@ -14,42 +16,41 @@ export default {
     QuizQestions,
   },
   data() {
-    const newQuiz = {
-      name: "",
-      questions: [],
-    };
-
     return {
-      newQuiz,
+      name: "",
+      showQestions: false,
+      createdQuizId: '',
     };
   },
   methods: {
     addQuestion(question) {
-      this.newQuiz.questions.push(question);
+      question.quiz_id = this.createdQuizId;
+      console.log(question);
+      axios.put(`/api/question/`,question).then((response) => {
+        this.showQestions = true;
+      });
     },
-    addAnswer(key, answer) {
-        this.newQuiz.questions[key].answers.push(answer)
+    addAnswer(answer) {
+      console.log(answer);
     },
     createQuiz() {
-        let result = this.validate();
-        if (!result.success) {
-            alert(result.error)
-        }
-        JSON.stringify(this.newQuiz);
-        axios.put(`/api/quiz/`, JSON.stringify(this.newQuiz)).then((response) => {
-          console.log(response);
-        });
+      axios.put(`/api/quiz/`, { name: this.name }).then((response) => {
+        this.createdQuizId = response.data.id;
+        this.showQestions = true;
+
+        this.$emit('createQuiz', response.data);
+      });
     },
     validate() {
-        if ( !this.newQuiz.name) {
-            return {
-                success: false,
-                error: 'Name field is required!'
-            };
-        }
+      if (!this.newQuiz.name) {
+        return {
+          success: false,
+          error: "Name field is required!",
+        };
+      }
 
-        return {success: true};
-    }
+      return { success: true };
+    },
   },
 };
 </script>
