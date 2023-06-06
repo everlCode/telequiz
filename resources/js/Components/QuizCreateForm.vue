@@ -1,10 +1,20 @@
 <template>
   <form class="form" @submit.prevent>
-    <input type="text" v-model="name" placeholder="quiz name" :disabled="showQestions" />
-    <va-button @click="createQuiz" v-if="name && !showQestions" class="my-1 btn mt-4">
+    <div class="flex items-start flex-col w-full">
+      <label for="quiz_name">Enter the quiz name</label>
+      <input
+        id="quiz_name"
+        type="text"
+        v-model="name"
+        placeholder="quiz name"
+        :disabled="showQuestions"
+      />
+    </div>
+
+    <va-button @click="createQuiz" v-if="name && !showQuestions" class="my-1 btn mt-4">
       Create
     </va-button>
-    <QuizQestions v-if="showQestions" @addQuestion="addQuestion" @addAnswer="addAnswer" />
+    <QuizQestions v-if="showQuestions" @addQuestion="addQuestion" @addVariant="addVariant" />
   </form>
 </template>
 <script>
@@ -18,27 +28,27 @@ export default {
   data() {
     return {
       name: "",
-      showQestions: false,
-      createdQuizId: '',
+      showQuestions: false,
+      createdQuizId: "",
     };
   },
   methods: {
     addQuestion(question) {
       question.quiz_id = this.createdQuizId;
       console.log(question);
-      axios.put(`/api/question/`,question).then((response) => {
-        this.showQestions = true;
+      axios.put(`/api/question/`, question).then((response) => {
+        this.showQuestions = true;
       });
     },
-    addAnswer(answer) {
-      console.log(answer);
+    addVariant(variant) {
+      console.log(variant);
     },
     createQuiz() {
       axios.put(`/api/quiz/`, { name: this.name }).then((response) => {
         this.createdQuizId = response.data.id;
-        this.showQestions = true;
+        this.showQuestions = true;
 
-        this.$emit('createQuiz', response.data);
+        this.$emit("createQuiz", response.data);
       });
     },
     validate() {

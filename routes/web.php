@@ -57,22 +57,17 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
         ]);
     })->name('quizzez'); // This will respond to requests for admin/photos and have a name of admin.photos
 
-    Route::get('/photos/create', function () {
-        return inertia('Admin/PhotosCreate');
-    })->name('photos.create');
+    Route::get('/create/quiz', function (Request $request, Quiz $quiz) {
+        return inertia('Admin/QuizCreate');
+        
+    })->name('create.quiz');
 
     Route::post('/quizzez', function (Request $request) {
-        //dd('I will handle the form submission')  
-        
-        //dd($request->all());
         $validated_data = $request->validate([
             'name' => ['required']
         ]);
-       
-        // $path = Storage::disk('public')->put('photos', $request->file('path'));
-        // $validated_data['path'] = '/storage/' . $path;
-        //dd($validated_data);
         Quiz::create($validated_data);
+
         return to_route('admin.quizzez');
     })->name('quizzez.store');
 });

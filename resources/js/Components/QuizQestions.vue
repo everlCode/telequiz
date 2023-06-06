@@ -2,18 +2,19 @@
   <div class="questions">
     <div class="question_block" v-for="(q, k) in questions">
       <div class="question">
-        <div class="name">{{ q.name }}</div>
-        <va-button class="btn" icon="add" @click="showCreateAnswer = k"> </va-button>
+        <div class="name">#{{ k + 1 }} {{ q.name }}</div>
+        <va-button v-if="showCreateVariant === null" class="btn" icon="add" @click="showCreateVariant = k"></va-button>
       </div>
-      <span v-if="q.answers.length > 0" class="variants">Variants:</span>
-      <div class="answers ml-10">
-        <div v-for="answer in q.answers" class="answer">
-          {{ answer.name }}
+      <span v-if="q.variants.length > 0" class="variants">Variants:</span>
+      <div class="variants ml-10">
+        <div v-for="variant in q.variants" class="variant">
+          {{ variant.name }}
         </div>
-        <div v-if="showCreateAnswer === k" class="createAnswer">
-          <label for="answer">Answer name:</label>
-          <input type="text" id="answer" v-model="answer" placeholder="answer" />
-          <va-button v-if="answer" class="btn" icon="add" @click="addAnswer(k)">
+        <div v-if="showCreateVariant === k" class="createVarinat flex items-center">
+          <label class="mr-5" for="variant">Variant name:</label>
+          <input type="text" id="variant" v-model="variant" placeholder="variant" />
+          <va-button v-if="variant" class="btn ml-4" icon="add" @click="addVariant(k)">
+          Add variant
           </va-button>
         </div>
       </div>
@@ -37,25 +38,25 @@
 </template>
 <script>
 export default {
-  emits: ["addQuestion", "addAnswer"],
+  emits: ["addQuestion", "addVariant"],
   data() {
     return {
       name: "",
-      answer: "",
+      variant: "",
       questions: [],
       showCreateQuestion: false,
-      showCreateAnswer: null,
+      showCreateVariant: null,
     };
   },
   methods: {
     addNewQuestion() {
       this.showCreateQuestion = true;
-      this.showCreateAnswer = false;
+      this.showCreateVariant = null;
     },
     addQuestion(k) {
       const question = {
         name: this.name,
-        answers: [],
+        variants: [],
       };
 
       this.questions.push(question);
@@ -63,15 +64,15 @@ export default {
       this.showCreateQuestion = false;
       this.name = "";
     },
-    addAnswer(k) {
-      let answer = {
-        name: this.answer,
+    addVariant(k) {
+      let variant = {
+        name: this.variant,
         question_id: k
       }
-      this.$emit("addAnswer", this.answer);
-      this.questions[k].answers?.push(answer);
-      this.answer = "";
-      this.showCreateAnswer = null;
+      this.$emit("addVariant", this.varinat);
+      this.questions[k].variants?.push(variant);
+      this.variant = "";
+      this.showCreateVariant = null;
     },
   },
 };
@@ -89,9 +90,6 @@ export default {
   flex-direction: column;
   width: 100%;
 }
-.btn {
-  align-self: start;
-}
 .questions {
   width: 100%;
 }
@@ -107,9 +105,8 @@ export default {
   border-bottom: 1px solid #c4c4c4;
   padding: 10px 0;
 }
-.answer {
-  display: flex;
-  align-items: center;
+.variant {
+  color: #726f6f
 }
 .createAnswer {
   display: flex;
@@ -117,8 +114,7 @@ export default {
   gap: 10px;
 }
 .variants {
-  font-size: 12px;
-  color: #000;
-  opacity: 0.4;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
 }
 </style>

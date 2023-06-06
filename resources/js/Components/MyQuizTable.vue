@@ -1,6 +1,8 @@
 <template>
   <div>
-    <va-button @click="openAddModal" preset="plain" icon="add"> Add</va-button>
+    <Link :href="route('admin.create.quiz')">
+      <va-button preset="plain" icon="add"> Add</va-button>
+    </Link>
     <div class="table">
       <div class="header">
         <div v-for="head in headers" class="head">
@@ -27,7 +29,7 @@
     </div>
   </div>
 
-  <va-modal
+  <!-- <va-modal
     @cancel="addModalVisible = false"
     :model-value="addModalVisible"
     title="Create quizz"
@@ -38,15 +40,18 @@
     <template #footer>
       <va-button @click="addModalVisible = false">Ok </va-button>
     </template>
-  </va-modal>
+  </va-modal> -->
 </template>
 <script>
 import QuizCreateForm from "@/Components/QuizCreateForm.vue";
+import NavLink from "@/Components/NavLink.vue";
+import { Head, Link, router } from "@inertiajs/vue3";
 
 export default {
   emits: ["deleteQuiz"],
   components: {
     QuizCreateForm,
+    Link,
   },
   props: {
     quizzez: {
@@ -61,23 +66,19 @@ export default {
   data() {
     return {
       data: this.quizzez,
-      addModalVisible: false,
     };
   },
   methods: {
     createQuiz(quiz) {
-        let data = {
-            id: quiz.id,
-            name: quiz.name
-        };
-        this.data.push(data)
+      let data = {
+        id: quiz.id,
+        name: quiz.name,
+      };
+      this.data.push(data);
     },
     deleteQuiz(index, id) {
       this.$emit("deleteQuiz", id);
       delete this.data[index];
-    },
-    openAddModal() {
-      this.addModalVisible = true;
     },
   },
 };
