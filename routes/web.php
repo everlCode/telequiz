@@ -96,11 +96,18 @@ Route::prefix('api')->group(function () {
     //QUESTION
     Route::put('/question', function (Request $request, Question $question) {
         return Question::create($request->all());
-    })->name('quiz');
+    })->name('question');
+
+    Route::delete('/question/{id}', function ($id) {
+        return Question::destroy($id);
+    })->name('question');
 
      //VARIANT
      Route::put('/variant', function (Request $request, Variant $question) {
-      
         return Variant::create($request->all());
-    })->name('quiz');
+    })->name('variant');
+
+    Route::delete('/variant/{id}', function ($id) {
+        return Variant::destroy($id);
+    })->name('variant');
 });

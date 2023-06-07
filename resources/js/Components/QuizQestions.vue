@@ -3,23 +3,51 @@
     <div class="question_block" v-for="(q, k) in questions">
       <div class="question">
         <div class="name">#{{ k + 1 }} {{ q.name }}</div>
-        <va-button
-          v-if="showCreateVariant === null"
-          class="btn"
-          icon="add"
-          @click="showCreateVariant = k; showCreateQuestion = false;"
-        ></va-button>
+        <div class="question_btns">
+          <va-button
+            v-if="showCreateVariant === null"
+            class="btn"
+            icon="add"
+            @click="
+              showCreateVariant = k;
+              showCreateQuestion = false;
+            "
+          ></va-button>
+          <va-button icon="delete" @click="removeQuestion(q.id, k)"> </va-button>
+        </div>
       </div>
       <span v-if="q.variants.length > 0" class="variants">Variants:</span>
       <div class="variants ml-10">
-        <div v-for="variant in q.variants" class="variant">
+        <div v-for="variant, variant_key in q.variants" class="variant flex gap-x-2">
           {{ variant.name }}
+          <div class="variant_btns">
+            <va-button
+              icon="delete"
+              size="small"
+              round
+              color="danger"
+              gradient
+              @click="removeVariant(k, variant_key)"
+            >
+            </va-button>
+          </div>
         </div>
       </div>
       <div v-if="showCreateVariant === k" class="createVarinat flex items-center">
         <label class="mr-5" for="variant">Variant name:</label>
-        <input v-on:keyup.enter="addVariant(k, q.id)" type="text" id="variant" v-model="variant" placeholder="variant" />
-        <va-button v-if="variant" class="btn ml-4" icon="add" @click="addVariant(k, q.id)">
+        <input
+          v-on:keyup.enter="addVariant(k, q.id)"
+          type="text"
+          id="variant"
+          v-model="variant"
+          placeholder="variant"
+        />
+        <va-button
+          v-if="variant"
+          class="btn ml-4"
+          icon="add"
+          @click="addVariant(k, q.id)"
+        >
           Add variant
         </va-button>
       </div>
@@ -28,7 +56,13 @@
 
   <div v-if="showCreateQuestion" class="createQuestion mt-5">
     <label for="question">Question name:</label>
-    <input v-on:keyup.enter="addQuestion(k)" v-model="name" id="question" type="text" placeholder="question" />
+    <input
+      v-on:keyup.enter="addQuestion(k)"
+      v-model="name"
+      id="question"
+      type="text"
+      placeholder="question"
+    />
     <va-button class="my-1 btn mt-4" icon="add" @click="addQuestion(k)">
       create
     </va-button>
@@ -41,13 +75,12 @@
   </div>
 </template>
 <script>
-
 export default {
-  emits: ["addQuestion", "addVariant"],
+  emits: ["addQuestion", "addVariant", "removeQuestion", "removeVariant"],
   props: {
     questions: {
-      type: Array
-    }
+      type: Array,
+    },
   },
   data() {
     return {
@@ -63,8 +96,8 @@ export default {
       this.showCreateVariant = null;
     },
     addQuestion(k) {
-      if(!this.name) {
-        alert('Fill the quiz name!');
+      if (!this.name) {
+        alert("Fill the quiz name!");
         return;
       }
 
@@ -73,21 +106,26 @@ export default {
         variants: [],
       };
 
-      //this.questions.push(question);
       this.$emit("addQuestion", question);
       this.showCreateQuestion = false;
       this.name = "";
     },
+    removeQuestion(id, k) {
+      this.$emit("removeQuestion", id, k);
+    },
     addVariant(k, id) {
-      console.log([k,id]);
       let variant = {
         name: this.variant,
         question_id: id,
       };
+
       this.$emit("addVariant", k, variant);
       this.variant = "";
       this.showCreateVariant = null;
     },
+    removeVariant(question_key, variant_key) {
+      this.$emit("removeVariant", question_key, variant_key);
+    }
   },
 };
 </script>
@@ -130,5 +168,12 @@ export default {
 .variants {
   display: grid;
   grid-template-columns: 25% 25% 25% 25%;
+}
+.question_btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+.variant_btns {
 }
 </style>

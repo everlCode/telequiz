@@ -15,7 +15,14 @@
     <va-button @click="createQuiz" v-if="name && !showQuestions" class="my-1 btn mt-4">
       Create
     </va-button>
-    <QuizQestions v-if="showQuestions" :questions="data" @addQuestion="addQuestion" @addVariant="addVariant" />
+    <QuizQestions
+      v-if="showQuestions"
+      :questions="data"
+      @addQuestion="addQuestion"
+      @addVariant="addVariant"
+      @removeQuestion="removeQuestion"
+      @removeVariant="removeVariant"
+    />
   </form>
 </template>
 <script>
@@ -28,8 +35,8 @@ export default {
   props: {
     questions: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   data() {
     return {
@@ -42,24 +49,35 @@ export default {
   methods: {
     addQuestion(question) {
       question.quiz_id = this.createdQuizId;
-      console.log(question);
       axios.put(`/api/question/`, question).then((response) => {
         response.data.variants = [];
-        this.data.push(response.data)
+        this.data.push(response.data);
         this.showQuestions = true;
       });
     },
+    removeQuestion(id, k) {
+      axios.delete(`/api/question/${id}`).then(response => {
+        this.data.splice(k, 1)
+      })
+    },
     addVariant(k, variant) {
-      variant.quiz_id = this.createdQuizId;
       variant.is_right = true;
 
       axios.put(`/api/variant/`, variant).then((response) => {
-          this.data[k].variants?.push(variant);
+        this.data[k].variants?.push(response.data);
       });
     },
+    removeVariant(question_key, variant_key) {
+      console.log(this.data[question_key].variants.splice(variant_key, 1));
+      console.log(variant_key);
+      // axios.delete(`/api/variant/${id}`).then(response => {
+      //   this.data[k]?.variants[id];
+        
+      // })
+    },
     createQuiz() {
-      if(!this.name) {
-        alert('Fill the quiz name!')
+      if (!this.name) {
+        alert("Fill the quiz name!");
       }
 
       axios.put(`/api/quiz/`, { name: this.name }).then((response) => {

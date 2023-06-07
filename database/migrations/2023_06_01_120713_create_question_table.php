@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('question', function (Blueprint $table) {
             $table->id();
-            $table->integer('quiz_id');
+            //$table->integer('quiz_id');
             $table->string('name');
             $table->timestamps();
+            $table->foreignId('quiz_id')->references('id')->on('quizzez')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

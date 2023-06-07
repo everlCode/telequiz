@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('variants', function (Blueprint $table) {
             $table->id();
-            $table->integer('quiz_id');
-            $table->integer('question_id');
+           // $table->integer('question_id');
             $table->boolean('is_right');
             $table->string('name');
             $table->timestamps();
+            $table->foreignId('question_id')->references('id')->on('question')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
