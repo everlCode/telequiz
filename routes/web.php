@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Photo;
 use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 /*
@@ -95,5 +96,11 @@ Route::prefix('api')->group(function () {
     //QUESTION
     Route::put('/question', function (Request $request, Question $question) {
         return Question::create($request->all());
-    })->name('quiz')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+    })->name('quiz');
+
+     //VARIANT
+     Route::put('/variant', function (Request $request, Variant $question) {
+      
+        return Variant::create($request->all());
+    })->name('quiz');
 });
