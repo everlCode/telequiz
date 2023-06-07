@@ -1,15 +1,18 @@
 <template>
+  {{ quiz }} 
   <form class="form" @submit.prevent>
     <div class="flex items-start flex-col w-full">
-      <label for="quiz_name">Enter the quiz name</label>
-      <input
-        v-on:keyup.enter="createQuiz"
-        id="quiz_name"
-        type="text"
-        v-model="name"
-        placeholder="quiz name"
-        :disabled="showQuestions"
-      />
+      <label v-if="!createdQuizId" for="quiz_name">Enter the quiz name</label>
+      <div class="flex justify-between gap-2 w-full">
+        <input
+          v-on:keyup.enter="createQuiz"
+          @change="editQuiz"
+          id="quiz_name"
+          type="text"
+          v-model="name"
+          placeholder="quiz name"
+        />
+      </div>
     </div>
 
     <va-button @click="createQuiz" v-if="name && !showQuestions" class="my-1 btn mt-4">
@@ -33,15 +36,12 @@ export default {
     QuizQestions,
   },
   props: {
-    questions: {
-      type: Array,
-      default: [],
-    },
+    quiz: Object,
   },
   data() {
     return {
-      name: "",
-      data: this.questions,
+      name: this.quiz?.name ? this.quiz.name : '',
+      data: this.quiz,
       showQuestions: false,
       createdQuizId: "",
     };
@@ -56,9 +56,9 @@ export default {
       });
     },
     removeQuestion(id, k) {
-      axios.delete(`/api/question/${id}`).then(response => {
-        this.data.splice(k, 1)
-      })
+      axios.delete(`/api/question/${id}`).then((response) => {
+        this.data.splice(k, 1);
+      });
     },
     addVariant(k, variant) {
       variant.is_right = true;
@@ -72,7 +72,7 @@ export default {
       console.log(variant_key);
       // axios.delete(`/api/variant/${id}`).then(response => {
       //   this.data[k]?.variants[id];
-        
+
       // })
     },
     createQuiz() {
@@ -83,8 +83,18 @@ export default {
       axios.put(`/api/quiz/`, { name: this.name }).then((response) => {
         this.createdQuizId = response.data.id;
         this.showQuestions = true;
-
+        this.isQuizNameInputDisabled = true;
         this.$emit("createQuiz", response.data);
+      });
+    },
+    editQuiz() {
+      if (!this.createdQuizId || !this.name) {
+        return;
+      }
+      let data = { name: this.name, id: this.createdQuizId };
+
+      axios.post(`/api/quiz/`, data).then((response) => {
+        this.isQuizNameChanged = true;
       });
     },
     validate() {

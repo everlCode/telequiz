@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\QuizController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -58,10 +59,18 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
         ]);
     })->name('quizzez'); // This will respond to requests for admin/photos and have a name of admin.photos
 
-    Route::get('/create/quiz', function (Request $request, Quiz $quiz) {
-        return inertia('Admin/QuizCreate');
+    Route::get('/create/quiz', function (Request $request) {
+        return inertia('Admin/QuizCreateEdit');
         
     })->name('create.quiz');
+
+    Route::get('/edit/quiz/{id}', function (QuizController $controller, int $id) {
+        $data = $controller->getQuizWithVariants($id);
+        
+        return Inertia::render('Admin/QuizCreateEdit', [
+            'quiz' => $data
+        ]);  
+    })->name('edit.quiz');
 
     Route::post('/quizzez', function (Request $request) {
         $validated_data = $request->validate([
@@ -84,9 +93,12 @@ Route::prefix('api')->group(function () {
         return Quiz::create($request->all());
     })->name('quiz')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
-    Route::post('/quiz/{id}', function (Request $request, $id) {
+    Route::post('/quiz', function (Request $request) {
+        $id = $request->id;
         $quiz = Quiz::find($id);
-        $quiz->create($request->all());
+
+        $quiz->name = $request->name;
+        return $quiz->save();
     })->name('quiz');
 
     Route::delete('/quiz/{id}', function (Request $request, $id) {

@@ -13,13 +13,13 @@
               showCreateQuestion = false;
             "
           ></va-button>
-          <va-button icon="delete" @click="removeQuestion(q.id, k)"> </va-button>
+          <va-button icon="delete" color="danger" @click="removeQuestion(q.id, k)"> </va-button>
         </div>
       </div>
-      <span v-if="q.variants.length > 0" class="variants">Variants:</span>
-      <div class="variants ml-10">
-        <div v-for="variant, variant_key in q.variants" class="variant flex gap-x-2">
-          {{ variant.name }}
+      <span v-if="q.variants.length > 0">Variants:</span>
+      <div class="variants grid gap-2 grid-cols-4 ml-10">
+        <div v-for="variant, variant_key in q.variants" class="variant flex justify-between gap-x-2">
+          <div class="variant_name leading-4">{{ variant.name }}</div> 
           <div class="variant_btns">
             <va-button
               icon="delete"
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div v-if="showCreateVariant === k" class="createVarinat flex items-center">
+      <div v-if="showCreateVariant === k" class="createVarinat flex items-center mt-5">
         <label class="mr-5" for="variant">Variant name:</label>
         <input
           v-on:keyup.enter="addVariant(k, q.id)"
@@ -79,7 +79,7 @@ export default {
   emits: ["addQuestion", "addVariant", "removeQuestion", "removeVariant"],
   props: {
     questions: {
-      type: Array,
+      type: Object,
     },
   },
   data() {
@@ -159,21 +159,25 @@ export default {
 }
 .variant {
   color: #726f6f;
+  border: 2px solid #154EC1;
+  border-radius: 15px;
+  padding: 5px 10px;
+  align-items: center;
+  font-size: 14px;
+  font-style: italic;
+}
+.variant_name {
+  
 }
 .createAnswer {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.variants {
-  display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-}
 .question_btns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5px;
 }
-.variant_btns {
-}
+
 </style>

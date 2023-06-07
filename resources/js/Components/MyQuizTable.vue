@@ -23,7 +23,9 @@
             icon="delete"
             class="ml-3"
           />
-          <va-button preset="plain" icon="edit" />
+          <Link :href="route('admin.edit.quiz', row['id'])">
+            <va-button preset="plain" icon="edit" />
+          </Link>
         </div>
       </div>
     </div>
@@ -44,7 +46,6 @@
 </template>
 <script>
 import QuizCreateForm from "@/Components/QuizCreateForm.vue";
-import NavLink from "@/Components/NavLink.vue";
 import { Head, Link, router } from "@inertiajs/vue3";
 
 export default {
