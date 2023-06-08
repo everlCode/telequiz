@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Quiz extends Model
 {
@@ -21,9 +22,8 @@ class Quiz extends Model
         'name'
     ];
 
-    public function createQuiz(Request $request)
+    public function getQuestionsByQuizId(int $id)
     {
-        $data = $request->all();
-        return $data['name'];
+        
     }
 }

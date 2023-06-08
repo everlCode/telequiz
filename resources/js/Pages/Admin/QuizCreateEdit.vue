@@ -19,7 +19,10 @@ export default {
   props: {
     quiz: {
         type: Object,
-        default: [],
+        default: {
+          name: '',
+          questions: []
+        },
     }
   },
   data() {

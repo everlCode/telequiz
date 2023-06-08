@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\Quiz;
+use App\Models\Variant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,15 +13,19 @@ class QuizController extends Controller
     public function getQuizWithVariants($id)
     {
         $quiz = Quiz::find($id);
-        $data = $quiz->toArray();
+        $quiz = $quiz->toArray();
+        
+        $questions = Question::where('quiz_id', $id)->get()->toArray();
+        //dd($questions);
+        $questionsIds = [];
+        foreach($questions as &$q) {
+            $variants = Variant::where('question_id', $q['id'])->get()->toArray();
+            $q['variants'] = $variants;
+        }
 
-        $data = DB::table('quizzez')
-            ->select('quizzez.*')    
-            ->where('quizzez.id', '=', $id)
-            
+        $quiz['questions'] = $questions;
 
-            ->get();
-
-        return $data;
+        //dd($quiz);
+        return $quiz;
     }
 }

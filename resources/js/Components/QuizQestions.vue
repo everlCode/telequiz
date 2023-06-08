@@ -1,6 +1,6 @@
-<template>
+<template> 
   <div class="questions">
-    <div class="question_block" v-for="(q, k) in questions">
+    <div class="question_block" v-for="(q, k) in questions"> 
       <div class="question">
         <div class="name">#{{ k + 1 }} {{ q.name }}</div>
         <div class="question_btns">
@@ -16,9 +16,11 @@
           <va-button icon="delete" color="danger" @click="removeQuestion(q.id, k)"> </va-button>
         </div>
       </div>
-      <span v-if="q.variants.length > 0">Variants:</span>
+      <span v-if="q.variants?.length > 0">Variants:</span>
       <div class="variants grid gap-2 grid-cols-4 ml-10">
         <div v-for="variant, variant_key in q.variants" class="variant flex justify-between gap-x-2">
+       
+          <input @change="changeCorrectVariant(variant.id)" type="checkbox" :checked="variant.is_right">
           <div class="variant_name leading-4">{{ variant.name }}</div> 
           <div class="variant_btns">
             <va-button
@@ -34,7 +36,7 @@
         </div>
       </div>
       <div v-if="showCreateVariant === k" class="createVarinat flex items-center mt-5">
-        <label class="mr-5" for="variant">Variant name:</label>
+        <label class="mr-5" for="variant">Variant name:</label> 
         <input
           v-on:keyup.enter="addVariant(k, q.id)"
           type="text"
@@ -122,6 +124,11 @@ export default {
       this.$emit("addVariant", k, variant);
       this.variant = "";
       this.showCreateVariant = null;
+    },
+    changeCorrectVariant(id) {
+      axios.post(`/api/variant/toggle/${id}`).then((response) => {
+        console.log(response);
+      });
     },
     removeVariant(question_key, variant_key) {
       this.$emit("removeVariant", question_key, variant_key);
