@@ -40,8 +40,6 @@ Route::middleware(['auth:sanctum', 'verified'])->prefix('admin')->name('admin.')
     })->name('dashboard');
 
     Route::get('/quizzez', function () {
-        //dd(Quiz::all());
-
         return inertia('Admin/Quizzez', [
             'quizzez' => Quiz::all(['id', 'name'])
         ]);
@@ -130,7 +128,7 @@ Route::prefix('api')->group(function () {
     })->name('settings');
 
     //TELEGRAM
-    Route::post('/telegram', function (TelegramController $controller, Request $request) {
-        return $controller->index($request);
+    Route::post('/telegram', function (TelegramController $controller) {
+        return $controller->index();
     })->name('telegram')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 });

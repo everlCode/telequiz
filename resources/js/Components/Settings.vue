@@ -29,10 +29,8 @@ export default {
         let url = 'https://api.telegram.org/bot' + this.token + '/setWebhook?url=' + this.url + '/api/telegram';
         console.log(url);
         axios.get(url).then((response) => {
-            console.log(response);
+            alert(response.data.description)
         })
-
-        "ngrok-skip-browser-warning": "69420",
     }
   }
 };
