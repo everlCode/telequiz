@@ -53,7 +53,7 @@ class TelegramController extends Controller
     public function handle()
     {
         $type = $this->getType();
-        $this->log($type);
+
         switch ($type) {
             case 'command':
                 $text = $this->message['text'];
@@ -64,31 +64,15 @@ class TelegramController extends Controller
                     $this->sendMessage($this->chatId, $result);
                     break;
                 }
+                break;
             case 'callback':
                 $callback = new QuizCallback($this->requestData['callback_query']);
+                $callback->setUserId($this->chatId);
+
                 $response = $callback->getResponse();
                 $this->sendMessage($this->chatId, $response);
                 break;
         }
-    }
-
-    private function handleCallback($data)
-    {
-        if (!array_key_exists('data', $data)) {
-            return;
-        }
-
-        $value = $data['data'];
-
-
-        
-    }
-
-    private function handleQuiz($id)
-    {
-        $tb = new TelegramQuizBot($this->telegramRequest);
-        $response = $tb->startQuiz($id);
-        $this->sendMessage($this->chatId, $response);
     }
 
     private function getMessage()
@@ -115,9 +99,10 @@ class TelegramController extends Controller
     private function sendMessage(int $chatId, array $data): void
     {
         $data['chat_id'] = $this->chatId;
+        $data['parse_mode'] = 'HTML';
         $result = $this->telegramRequest::sendMessage($data);
 
-        //$this->log($data);
+        $this->log($result);
     }
 
     protected function isCommand()

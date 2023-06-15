@@ -2,6 +2,7 @@
 
 use App\Models\Quiz;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class QuizzezCommand
 {
@@ -14,7 +15,7 @@ class QuizzezCommand
 
         $data['text'] = 'Choose quiz';
         $data['reply_markup'] = $buttons;
-
+        Log::debug($data);
         return $data;
     }
 
@@ -29,7 +30,7 @@ class QuizzezCommand
         foreach($quizzez as $q) {
             $output[] = [
                 'text' => $q->name,
-                'callback_data' => '{"type":"quiz", "command": "start", "id":' . $q->id . '}' 
+                'callback_data' => '{"type":"question", "command": "start", "id":' . $q->id . '}' 
             ];
         }
         
